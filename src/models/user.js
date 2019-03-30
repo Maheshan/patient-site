@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = 10;
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new Schema({
   name: {
@@ -49,8 +50,25 @@ const userSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role",
     required: true
-  }
+  },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true
+      }
+    }
+  ]
 });
+
+//Must use function and not arrow due to the use of this keyword
+userSchema.methods.generateAuthToken = async function() {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, "thisissosecure");
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
+  return token;
+};
 
 userSchema.statics.findByCredentials = async (email, password) => {
   let user = await User.findOne({ email });

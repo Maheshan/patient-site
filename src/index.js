@@ -1,7 +1,7 @@
 const express = require("express");
 require("./db/mongoose");
 const userRouter = require("./routers/user");
-const Role = require("./models/role");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const port = process.env.PORT || 5000;
