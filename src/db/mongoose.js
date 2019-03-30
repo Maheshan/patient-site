@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const connectionString = require("../../config/keys").mongoURI;
+const seededRoles = require("../db/seededRoles");
+const seededUsers = require("../db/seededUsers");
 const User = require("../models/user");
 const Role = require("../models/role");
 
@@ -12,54 +14,8 @@ Role.collection.drop();
 User.collection.drop();
 
 const seedData = async () => {
-  let seededRoles = [
-    {
-      role: "Doctor"
-    },
-    {
-      role: "Patient"
-    }
-  ];
-  let roles = await Role.create(seededRoles);
-  let seededUsers = [
-    {
-      name: "Doogie Howser",
-      age: 14,
-      email: "dhowser@aol.com",
-      password: "tester1234567",
-      address: "Something",
-      phone: "1234567890",
-      role: roles[0]
-    },
-    {
-      name: "Rick Sanchez",
-      age: 70,
-      email: "wubbalubbadubdub@hotmail.com",
-      password: "IheartMeseeks23",
-      address: "Something",
-      phone: "1234567890",
-      role: roles[1]
-    },
-    {
-      name: "Dante",
-      age: 37,
-      email: "devilmayweep@gmail.com",
-      password: "betterthanvirgil25",
-      address: "Something",
-      phone: "1234567890",
-      role: roles[1]
-    },
-    {
-      name: "Motoko Kusanagi",
-      age: 30,
-      email: "hackerleet@gmail.com",
-      password: "Tachikoma123",
-      address: "Something",
-      phone: "1234567890",
-      role: roles[1]
-    }
-  ];
-  let users = await User.create(seededUsers);
+  let roles = await Role.create(await seededRoles());
+  let users = await User.create(await seededUsers(roles));
   return users;
 };
 
