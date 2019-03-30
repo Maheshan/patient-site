@@ -39,10 +39,16 @@ router.patch("/users/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    let user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
+    let user = await User.findById(req.params.id);
+
+    updates.forEach(update => {
+      user[update] = req.body[update];
     });
+
+    //Must do this as mongoose findByIdAndUpdate bypasses middleware so if we
+    //ever wanted to chage password, it'd get stored as plaintext
+    await user.save();
+
     if (!user) {
       res.status(404).send();
     }

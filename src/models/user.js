@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = 10;
 const validator = require("validator");
 
-const UserSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -51,7 +51,7 @@ const UserSchema = new Schema({
   }
 });
 
-UserSchema.pre("save", function(next) {
+userSchema.pre("save", function(next) {
   var user = this;
 
   // only hash the password if it has been modified (or is new)
@@ -72,11 +72,11 @@ UserSchema.pre("save", function(next) {
   });
 });
 
-UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if (err) return cb(err);
     cb(null, isMatch);
   });
 };
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", userSchema);
