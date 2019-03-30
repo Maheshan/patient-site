@@ -23,6 +23,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true,
     lowercase: true,
     validate(value) {
       if (!validator.isEmail(value)) {
@@ -51,6 +52,20 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.statics.findByCredentials = async (email, password) => {
+  let user = await User.findOne({ email });
+  if (!user) {
+    throw new Error("Unable to login.");
+  }
+
+  let isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    throw new Error("Unable to login.");
+  }
+  return user;
+};
+
 userSchema.pre("save", function(next) {
   var user = this;
 
@@ -72,11 +87,6 @@ userSchema.pre("save", function(next) {
   });
 });
 
-userSchema.methods.comparePassword = function(candidatePassword, cb) {
-  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-    if (err) return cb(err);
-    cb(null, isMatch);
-  });
-};
+const User = mongoose.model("User", userSchema);
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = User;
