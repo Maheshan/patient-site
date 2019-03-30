@@ -7,7 +7,8 @@ const Role = require("../models/role");
 
 mongoose.connect(connectionString, {
   useNewUrlParser: true,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 Role.collection.drop();

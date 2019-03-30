@@ -20,7 +20,7 @@ app.get("/users", async (req, res) => {
 
 app.get("/users/:id", async (req, res) => {
   try {
-    const _id = req.params.id;
+    let _id = req.params.id;
     let user = await User.findById(_id);
     if (!user) {
       return res.status(404).send();
@@ -28,6 +28,29 @@ app.get("/users/:id", async (req, res) => {
     res.send(user);
   } catch (e) {
     res.status(500).send();
+  }
+});
+
+app.patch("/users/:id", async (req, res) => {
+  let updates = Object.keys(req.body);
+  const allowedUpdates = ["name", "age", "address", "email", "phone"];
+  let isValid = updates.every(update => {
+    return allowedUpdates.includes(update);
+  });
+  if (!isValid) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+  try {
+    let user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+    if (!user) {
+      res.status(404).send();
+    }
+    res.send(user);
+  } catch (e) {
+    res.status(400).send(e);
   }
 });
 
