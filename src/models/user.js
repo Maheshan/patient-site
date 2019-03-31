@@ -61,10 +61,22 @@ const userSchema = new Schema({
   ]
 });
 
+userSchema.methods.toJSON = function() {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
+
 //Must use function and not arrow due to the use of this keyword
 userSchema.methods.generateAuthToken = async function() {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, "thisissosecure");
+  const token = jwt.sign({ _id: user._id.toString() }, "thisissosecure", {
+    expiresIn: "1 hour"
+  });
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
