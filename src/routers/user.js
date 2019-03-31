@@ -28,7 +28,7 @@ router.post("/users/logout", auth, async (req, res) => {
 
 router.get("/users", auth, async (req, res) => {
   try {
-    if (!req.user.role.role === "Doctor") {
+    if (!req.role === "Doctor") {
       return res.status(403).send();
     }
     let users = await User.find({});
