@@ -10,7 +10,7 @@ router.post("/users/login", async (req, res) => {
     const token = await user.generateAuthToken();
     res.send({ user: user, token });
   } catch (e) {
-    res.status(400).send();
+    res.status(401).send("Bad man");
   }
 });
 
@@ -28,8 +28,8 @@ router.post("/users/logout", auth, async (req, res) => {
 
 router.get("/users", auth, async (req, res) => {
   try {
-    if (!req.role === "Doctor") {
-      return res.status(403).send();
+    if (req.role !== "Doctor") {
+      res.redirect("/users/me");
     }
     let users = await User.find({});
     res.send(users);
