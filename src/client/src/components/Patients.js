@@ -43,6 +43,7 @@ class Patients extends Component {
       {
         Header: "Profile",
         accessor: "_id",
+        filterable: false,
         Cell: ({ row }) => (
           <button type="button" onClick={() => this.getDetail(row._id)}>
             View
@@ -50,7 +51,21 @@ class Patients extends Component {
         )
       }
     ];
-    return <ReactTable data={this.state.users} columns={columns} />;
+    return (
+      <ReactTable
+        filterable
+        defaultPageSize={5}
+        minRows={5}
+        defaultSorted={[
+          {
+            id: "name",
+            desc: false
+          }
+        ]}
+        data={this.state.users}
+        columns={columns}
+      />
+    );
   }
 }
 
