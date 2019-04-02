@@ -29,7 +29,7 @@ router.post("/users/logout", auth, async (req, res) => {
 router.get("/users", auth, async (req, res) => {
   try {
     if (req.role !== "Doctor") {
-      res.redirect("/users/me");
+      return res.status(401).send();
     }
     let users = await User.find({});
     res.send(users);
@@ -45,6 +45,10 @@ router.get("/users/me", auth, async (req, res) => {
 router.get("/users/:id", auth, async (req, res) => {
   try {
     let _id = req.params.id;
+    //Prevent a patient from see another patient's info
+    if (req.user.role.role === "Patient" && _id !== req.user._id) {
+      return res.status(400).send();
+    }
     let user = await User.findById(_id);
     if (!user) {
       return res.status(404).send();
@@ -57,7 +61,14 @@ router.get("/users/:id", auth, async (req, res) => {
 
 router.patch("/users/me", auth, async (req, res) => {
   let updates = Object.keys(req.body);
-  const allowedUpdates = ["name", "age", "address", "email", "phone"];
+  const allowedUpdates = [
+    "firstname",
+    "lastname",
+    "age",
+    "address",
+    "email",
+    "phone"
+  ];
   let isValid = updates.every(update => {
     return allowedUpdates.includes(update);
   });
@@ -72,7 +83,8 @@ router.patch("/users/me", auth, async (req, res) => {
     });
 
     //Must do this as mongoose findByIdAndUpdate bypasses middleware so if we
-    //ever wanted to chage password, it'd get stored as plaintext
+    //ever wanted to chage password, it'd get stored as plaintext. calling save triggers
+    //middleware
     await user.save();
     res.send(user);
   } catch (e) {

@@ -37,8 +37,12 @@ class Patients extends Component {
   render() {
     const columns = [
       {
-        Header: "List of Patients",
-        accessor: "name"
+        Header: "First Name",
+        accessor: "firstname"
+      },
+      {
+        Header: "Last Name",
+        accessor: "lastname"
       },
       {
         Header: "Profile",
@@ -58,7 +62,7 @@ class Patients extends Component {
         minRows={5}
         defaultSorted={[
           {
-            id: "name",
+            id: "firstname",
             desc: false
           }
         ]}

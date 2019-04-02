@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import AuthService from "./AuthService";
 import "./index.css";
 import "./App.css";
-import Patient from "./Patients";
+import Patients from "./Patients";
 import PatientDetail from "./PatientDetail";
 import { Route, BrowserRouter as Router, Redirect } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,6 +14,7 @@ import Login from "./Login";
 const Auth = new AuthService();
 
 const handleLogout = props => {
+  console.log(props);
   Auth.logout();
   props.history.replace("/login");
 };
@@ -49,7 +50,7 @@ const DefaultLayout = ({ component: Component, ...rest }) => {
 ReactDOM.render(
   <Router>
     <div>
-      <DefaultLayout exact path="/" component={Patient} />
+      <DefaultLayout exact path="/" component={Patients} />
       <DefaultLayout exact path="/users/:userId" component={PatientDetail} />
       <Route exact path="/login" component={Login} />
     </div>

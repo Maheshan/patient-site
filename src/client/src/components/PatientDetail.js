@@ -26,11 +26,7 @@ class PatientDetail extends Component {
     toast("User saved successfully!");
   }
 
-  onSubmit() {
-    return new Promise(resolve => {
-      console.log("huh");
-    });
-  }
+  onSubmit() {}
 
   componentDidMount() {
     Auth.fetch(
@@ -58,7 +54,8 @@ class PatientDetail extends Component {
                     address: values.address,
                     age: values.age,
                     email: values.email,
-                    name: values.name,
+                    firstname: values.firstname,
+                    lastname: values.lastname,
                     phone: values.phone
                   };
                   console.log(data);
@@ -69,20 +66,38 @@ class PatientDetail extends Component {
                 }}
               >
                 <div>
-                  <label>Patient Name</label>
+                  <label>First Name</label>
                   <Field
                     validate={required}
-                    name="name"
+                    name="firstname"
                     component="input"
-                    placeholder="Patient name"
+                    placeholder="First Name"
                   >
                     {({ input, meta }) => (
                       <div>
                         <input
                           {...input}
                           type="text"
-                          placeholder="Patient Name"
+                          placeholder="First Name"
                         />
+                        {meta.error && meta.touched && (
+                          <span>{meta.error}</span>
+                        )}
+                      </div>
+                    )}
+                  </Field>
+                </div>
+                <div>
+                  <label>Last Name</label>
+                  <Field
+                    validate={required}
+                    name="lastname"
+                    component="input"
+                    placeholder="Last Name"
+                  >
+                    {({ input, meta }) => (
+                      <div>
+                        <input {...input} type="text" placeholder="Last Name" />
                         {meta.error && meta.touched && (
                           <span>{meta.error}</span>
                         )}

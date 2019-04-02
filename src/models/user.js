@@ -6,7 +6,12 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new Schema({
-  name: {
+  firstname: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  lastname: {
     type: String,
     required: true,
     trim: true

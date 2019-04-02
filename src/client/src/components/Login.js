@@ -44,8 +44,15 @@ class Login extends Component {
     e.preventDefault();
     this.Auth.login(this.state.email, this.state.password)
       .then(res => {
-        console.log(res);
-        this.props.history.replace("/");
+        if (res.user.role.role === "Doctor") {
+          this.props.history.replace("/");
+        } else {
+          console.log(res);
+          this.props.history.replace({
+            pathname: `/users/${res.user.role._id}`,
+            state: { userId: res.user._id }
+          });
+        }
       })
       .catch(err => {
         alert(err);
