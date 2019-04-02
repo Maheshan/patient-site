@@ -1,4 +1,6 @@
 import decode from "jwt-decode";
+import { toast } from "react-toastify";
+
 export default class AuthService {
   // Initializing important variables
   constructor(domain) {
@@ -6,6 +8,11 @@ export default class AuthService {
     this.fetch = this.fetch.bind(this); // React binding stuff
     this.login = this.login.bind(this);
     this.getProfile = this.getProfile.bind(this);
+    this._checkStatus = this._checkStatus.bind(this);
+  }
+
+  notify() {
+    toast("Uh Oh. An error occurred!");
   }
 
   login(email, password) {
@@ -90,6 +97,7 @@ export default class AuthService {
       return response;
     } else {
       console.log(response);
+      this.notify();
       var error = new Error(response.statusText);
       error.response = response;
       throw error;

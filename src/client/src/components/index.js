@@ -6,6 +6,8 @@ import "./App.css";
 import Patient from "./Patients";
 import PatientDetail from "./PatientDetail";
 import { Route, BrowserRouter as Router, Redirect } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Our Components
 import Login from "./Login";
@@ -35,6 +37,7 @@ const DefaultLayout = ({ component: Component, ...rest }) => {
             </div>
           </div>
           <div>
+            <ToastContainer />
             <Component {...matchProps} />
           </div>
         </div>
