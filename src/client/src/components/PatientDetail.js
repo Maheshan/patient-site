@@ -18,7 +18,8 @@ class PatientDetail extends Component {
     super(props);
     this.state = {
       user: null,
-      success: false
+      success: false,
+      viewerrole: props.user.role
     };
   }
 
@@ -29,6 +30,7 @@ class PatientDetail extends Component {
   onSubmit() {}
 
   componentDidMount() {
+    console.log(this.props);
     Auth.fetch(
       `http://localhost:5000/users/${this.props.history.location.state.userId}`
     ).then(user => {
@@ -39,12 +41,20 @@ class PatientDetail extends Component {
   }
 
   render() {
+    var button =
+      this.state.viewerrole === "Doctor" ? (
+        <div />
+      ) : (
+        <div className="buttons">
+          <button type="submit">Submit</button>
+        </div>
+      );
     var form = (
       <Styles>
         <Form
           onSubmit={this.onSubmit}
           initialValues={this.state.user}
-          render={({ handleSubmit, values, pristine, submitting }) => {
+          render={({ handleSubmit, values }) => {
             return (
               <form
                 onSubmit={e => {
@@ -79,6 +89,9 @@ class PatientDetail extends Component {
                           {...input}
                           type="text"
                           placeholder="First Name"
+                          disabled={
+                            this.state.viewerrole === "Doctor" ? "disabled" : ""
+                          }
                         />
                         {meta.error && meta.touched && (
                           <span>{meta.error}</span>
@@ -97,7 +110,14 @@ class PatientDetail extends Component {
                   >
                     {({ input, meta }) => (
                       <div>
-                        <input {...input} type="text" placeholder="Last Name" />
+                        <input
+                          {...input}
+                          type="text"
+                          placeholder="Last Name"
+                          disabled={
+                            this.state.viewerrole === "Doctor" ? "disabled" : ""
+                          }
+                        />
                         {meta.error && meta.touched && (
                           <span>{meta.error}</span>
                         )}
@@ -123,6 +143,9 @@ class PatientDetail extends Component {
                           {...input}
                           type="text"
                           placeholder="Patient age"
+                          disabled={
+                            this.state.viewerrole === "Doctor" ? "disabled" : ""
+                          }
                         />
                         {meta.error && meta.touched && (
                           <span>{meta.error}</span>
@@ -138,6 +161,9 @@ class PatientDetail extends Component {
                     name="email"
                     component="input"
                     placeholder="Email"
+                    disabled={
+                      this.state.viewerrole === "Doctor" ? "disabled" : ""
+                    }
                   >
                     {({ input, meta }) => (
                       <div>
@@ -145,6 +171,9 @@ class PatientDetail extends Component {
                           {...input}
                           type="text"
                           placeholder="Patient email"
+                          disabled={
+                            this.state.viewerrole === "Doctor" ? "disabled" : ""
+                          }
                         />
                         {meta.error && meta.touched && (
                           <span>{meta.error}</span>
@@ -167,6 +196,9 @@ class PatientDetail extends Component {
                           {...input}
                           type="text"
                           placeholder="Patient address"
+                          disabled={
+                            this.state.viewerrole === "Doctor" ? "disabled" : ""
+                          }
                         />
                         {meta.error && meta.touched && (
                           <span>{meta.error}</span>
@@ -189,6 +221,9 @@ class PatientDetail extends Component {
                           {...input}
                           type="text"
                           placeholder="Patient phone"
+                          disabled={
+                            this.state.viewerrole === "Doctor" ? "disabled" : ""
+                          }
                         />
                         {meta.error && meta.touched && (
                           <span>{meta.error}</span>
@@ -197,11 +232,7 @@ class PatientDetail extends Component {
                     )}
                   </Field>
                 </div>
-                <div className="buttons">
-                  <button type="submit" disabled={submitting || pristine}>
-                    Submit
-                  </button>
-                </div>
+                {button}
               </form>
             );
           }}

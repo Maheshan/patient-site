@@ -79,9 +79,13 @@ userSchema.methods.toJSON = function() {
 //Must use function and not arrow due to the use of this keyword
 userSchema.methods.generateAuthToken = async function() {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, "thisissosecure", {
-    expiresIn: "1 hour"
-  });
+  const token = jwt.sign(
+    { _id: user._id.toString(), role: user.role.role },
+    "thisissosecure",
+    {
+      expiresIn: "1 hour"
+    }
+  );
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
