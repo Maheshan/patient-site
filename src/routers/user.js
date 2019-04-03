@@ -10,7 +10,7 @@ router.post("/users/login", async (req, res) => {
     const token = await user.generateAuthToken();
     res.send({ user: user, token });
   } catch (e) {
-    res.status(401).send("Bad man");
+    res.status(401).send();
   }
 });
 
@@ -32,7 +32,6 @@ router.get("/users", auth, async (req, res) => {
       return res.status(401).send();
     }
     let roles = ["Patient"];
-    let users = await User.find();
     await User.find()
       .populate("role", null, { role: { $in: roles } })
       .exec((err, users) => {
@@ -41,8 +40,6 @@ router.get("/users", auth, async (req, res) => {
         });
         res.send(users);
       });
-
-    // res.send(users);
   } catch (e) {
     res.status(500).send();
   }
@@ -60,10 +57,10 @@ router.get("/users/:id", auth, async (req, res) => {
       return res.status(400).send();
     }
     let user = await User.findById(_id);
-    await user.populate("role").execPopulate();
     if (!user) {
       return res.status(404).send();
     }
+    await user.populate("role").execPopulate();
     res.send(user);
   } catch (e) {
     res.status(500).send();
