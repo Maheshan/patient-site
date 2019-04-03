@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +27,8 @@
     "validator": "^10.11.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10"
+    "jest": "^24.0.0-alpha.9",
+    "nodemon": "^1.18.10",
+    "supertest": "^3.4.1"
   }
 }
