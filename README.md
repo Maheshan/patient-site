@@ -3,4 +3,4 @@
 2). To run webserver use nodemon (hardcoded to use port 5000)
 
 Please refer to seededUsers.js for user login creds located under <Root>/src/db/seededUsers.js \
-DB is loaded from AtlasDB (which is left blank in <Root>/config/keys.js) Will provide creds via email \
+DB is loaded from AtlasDB so the db should already be there for testing.
